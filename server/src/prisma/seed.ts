@@ -21,6 +21,12 @@ function monthsAgo(n: number, day = 15): Date {
 }
 
 async function main() {
+  const existingUsers = await prisma.user.count()
+  if (existingUsers > 0) {
+    console.log('Database already contains data — skipping seed.')
+    return
+  }
+
   console.log('Resetting database...')
   await prisma.invoice.deleteMany()
   await prisma.bill.deleteMany()
