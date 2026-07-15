@@ -219,13 +219,13 @@ export default function Landing() {
       >
         <div id="headline" className="relative z-20 mb-8 max-w-2xl text-center">
           <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">
-            Invoicing, inventory and accounts —{' '}
+            Invoicing, inventory and accounts{' '}
             <span className="bg-gradient-to-r from-teal-600 to-emerald-500 bg-clip-text text-transparent">
               finally in sync
             </span>
           </h1>
           <p className="mx-auto mt-3 max-w-lg text-base text-gray-600 dark:text-gray-400">
-            Mark an invoice paid and watch it flow straight into your balance and cashflow — one connected system.
+            Mark an invoice paid and watch it flow straight into your balance and cashflow one connected system.
           </p>
           {staticMode && (
             <button
