@@ -62,8 +62,8 @@ app.use(
   },
 )
 
-app.listen(PORT, () => {
-  console.log(`Fine Enterprises API listening on http://localhost:${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Fine Enterprises API listening on port ${PORT}`)
 })
 
 void prisma

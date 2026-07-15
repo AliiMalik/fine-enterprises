@@ -9,6 +9,7 @@ const __dirname = dirname(__filename)
 export const REPO_ROOT = path.resolve(__dirname, '..', '..')
 export const ENV_PATH = path.join(REPO_ROOT, '.env')
 
-export const PORT = Number(process.env.PORT ?? 4000)
+const rawPort = process.env.PORT
+export const PORT = rawPort && rawPort !== '0' ? Number(rawPort) : 5000
 export const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-secret-change-me'
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? '7d'
