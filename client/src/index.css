@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-surface text-gray-800 font-sans antialiased dark:bg-gray-950 dark:text-gray-200;
+}
+
+input,
+select,
+textarea {
+  @apply outline-none;
+}
+
+/* Subtle film grain for the landing hero (inline SVG noise, no dependency). */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Shimmer sweep for skeleton loaders (see components/ui/Skeleton.tsx). */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.animate-shimmer {
+  animation: shimmer 1.5s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer {
+    animation: none;
+  }
+}
+
+/* MagicUI AnimatedThemeToggler (variant="circle"): a circular clip-path
+   reveal driven by the View Transitions API. The circle originates at the
+   toggle button (--theme-toggle-x/y) and expands to cover the viewport
+   (--theme-toggle-radius). When going dark the NEW state reveals over the old;
+   when going light the OLD state reveals over the new. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@keyframes toggle-circle {
+  from {
+    clip-path: circle(0% at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--theme-toggle-radius, 150%) at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+}
+
+/* The NEW frame is always on top and runs the circular clip reveal, so the
+   incoming theme (dark when going light->dark, light when going dark->light)
+   wipes in from the toggle button in BOTH directions. */
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: toggle-circle 0.4s ease-in-out;
+}

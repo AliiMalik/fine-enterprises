@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+}
+
+model Customer {
+  id           String    @id @default(uuid())
+  name         String
+  email        String?
+  phone        String?
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  postcode     String?
+  country      String?
+  invoices     Invoice[]
+  createdAt    DateTime  @default(now())
+}
+
+model Invoice {
+  id            String      @id @default(uuid())
+  crn           String
+  invoiceNumber String      @unique
+  issueDate     DateTime    @default(now())
+  dueDate       DateTime?
+  status        String      @default("DRAFT")
+  customerId    String
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  lineItems     LineItem[]
+  subtotal      Decimal     @default(0)
+  tax           Decimal     @default(0)
+  grandTotal    Decimal     @default(0)
+  createdAt     DateTime    @default(now())
+}
+
+model LineItem {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id])
+  sku         String
+  description String
+  quantity    Int
+  unitPrice   Decimal
+  lineTotal   Decimal
+}
+
+model Product {
+  id            String         @id @default(uuid())
+  sku           String         @unique
+  name          String
+  description   String?
+  unitPrice     Decimal        @default(0)
+  stockCartons  Int            @default(0)
+  shipmentItems ShipmentItem[]
+  lineItems     LineItem[]
+  createdAt     DateTime       @default(now())
+}
+
+model Shipment {
+  id             String         @id @default(uuid())
+  shipmentNumber String         @unique
+  receivedDate   DateTime       @default(now())
+  items          ShipmentItem[]
+  createdAt      DateTime       @default(now())
+}
+
+model ShipmentItem {
+  id              String   @id @default(uuid())
+  shipmentId      String
+  shipment        Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id])
+  quantityCartons Int
+}
+
+model Transaction {
+  id          String    @id @default(uuid())
+  type        String
+  description String
+  category    String?
+  amount      Decimal
+  date        DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+}
+
+model Bill {
+  id           String     @id @default(uuid())
+  billNumber   String     @unique
+  supplierName String
+  issueDate    DateTime   @default(now())
+  dueDate      DateTime?
+  status       String     @default("DRAFT")
+  category     String?
+  subtotal     Decimal    @default(0)
+  tax          Decimal    @default(0)
+  grandTotal   Decimal    @default(0)
+  items        BillItem[]
+  createdAt    DateTime   @default(now())
+}
+
+model BillItem {
+  id          String  @id @default(uuid())
+  billId      String
+  bill        Bill    @relation(fields: [billId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Int
+  unitPrice   Decimal
+  lineTotal   Decimal
+}

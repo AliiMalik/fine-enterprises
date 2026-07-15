@@ -1,0 +1,30 @@
+{
+  "name": "fine-enterprises",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Fine Enterprises Ltd — lightweight business management tool (Invoicing, Inventory, Accounts)",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c green,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
+    "dev:server": "npm run dev -w server",
+    "dev:client": "npm run dev -w client",
+    "build": "npm run build -w client && npm run build -w server",
+    "seed": "npm run seed -w server",
+    "prisma:migrate": "prisma migrate dev --schema server/src/prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema server/src/prisma/schema.prisma",
+    "prisma:push": "prisma db push --schema server/src/prisma/schema.prisma",
+    "prisma:deploy": "prisma migrate deploy --schema server/src/prisma/schema.prisma",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0"
+  }
+}

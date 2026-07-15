@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+
+# Local env / secrets (never commit)
+.env
+.env.local
+.env.*.local
+
+# SQLite database (regenerated on deploy)
+server/prisma/dev.db*
+*.db
+*.db-journal
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
